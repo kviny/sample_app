@@ -4,7 +4,7 @@ describe User do
   before(:each) do
     @valid_attributes = {
       :name => "value for name",
-      :email => "value for email"
+      :email => "example@example.com"
     }
   end
 
@@ -42,5 +42,12 @@ describe User do
       invalid_email_user = User.new(@valid_attributes.merge(:email => address))
       invalid_email_user.should_not be_valid
     end
+  end
+  
+  it 'should reject duplicate email addresses identical up to case' do
+    upcased_email = @valid_attributes[:email].upcase
+    User.create!(@valid_attributes.merge(:email => upcased_email))
+    user_with_duplicate_email = User.new(@valid_attributes)
+    user_with_duplicate_email.should_not be_valid
   end
 end
